@@ -73,4 +73,19 @@ defmodule Lumen.Analytics do
       unique_visitors_today: unique_visitors_today
     }
   end
+
+  @doc """
+  Gets top pages by view count.
+  """
+  def get_top_pages(site_id, opts \\ []) do
+    limit = Keyword.get(opts, :limit, 10)
+
+    Event
+    |> where([e], e.site_id == ^site_id)
+    |> group_by([e], e.path)
+    |> select([e], {e.path, count(e.id)})
+    |> order_by([e], desc: count(e.id))
+    |> limit(^limit)
+    |> Repo.all()
+  end
 end

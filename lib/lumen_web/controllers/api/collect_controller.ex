@@ -2,11 +2,6 @@ defmodule LumenWeb.Api.CollectController do
   use LumenWeb, :controller
   alias Lumen.Analytics
 
-  def options(conn, _params) do
-    conn
-    |> send_resp(:no_content, "")
-  end
-
   @doc """
   Endpoint to collect analytics events.
 
@@ -19,8 +14,13 @@ defmodule LumenWeb.Api.CollectController do
   """
   def create(conn, params) do
     with {:ok, site_id} <- validate_site(params["site_id"]),
-         {:ok, _event} <- create_event(site_id, params, conn) do
-      # Return a 202 Accepted (async processing)
+         {:ok, event} <- create_event(site_id, params, conn) do
+      Phoenix.PubSub.broadcast(
+        Lumen.PubSub,
+        "site:#{site_id}",
+        {:new_event, event}
+      )
+
       conn
       |> put_status(:accepted)
       |> json(%{status: "ok"})

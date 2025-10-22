@@ -18,6 +18,9 @@ defmodule LumenWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    live "/sites", SitesLive
+    live "/dashboard/:site_id", DashboardLive
   end
 
   # Other scopes may use custom stacks.
