@@ -38,3 +38,4 @@ npm-debug.log
 
 /.direnv
 /.nixenv
+/.elixir_ls
