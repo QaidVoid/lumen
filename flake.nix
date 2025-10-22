@@ -24,9 +24,14 @@
               elixir-ls
               esbuild
               postgresql
+              rebar3
               tailwindcss_4
               tailwindcss-language-server
               watchman
+
+              (writeShellScriptBin "pg-setup" ''
+                createuser -d postgres
+              '')
 
               (writeShellScriptBin "pg-start" ''
                 if [ ! -d $PGDIR ]; then

@@ -8,7 +8,8 @@ import Config
 config :lumen, Lumen.Repo,
   username: "postgres",
   password: "postgres",
-  hostname: "localhost",
+  # hostname: "localhost",
+  socket_dir: System.get_env("PGHOST"),
   database: "lumen_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2
