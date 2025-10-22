@@ -20,6 +20,7 @@
           buildInputs =
             with pkgs;
             [
+              biome
               elixir_1_19
               elixir-ls
               esbuild
@@ -27,6 +28,7 @@
               rebar3
               tailwindcss_4
               tailwindcss-language-server
+              typescript-language-server
               watchman
 
               (writeShellScriptBin "pg-setup" ''
