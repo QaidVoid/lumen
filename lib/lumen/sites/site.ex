@@ -9,6 +9,7 @@ defmodule Lumen.Sites.Site do
     field :domain, :string
     field :public_id, :string
 
+    belongs_to :user, Lumen.Accounts.User, type: :integer
     has_many :events, Lumen.Analytics.Event
 
     timestamps(type: :utc_datetime)
@@ -17,8 +18,8 @@ defmodule Lumen.Sites.Site do
   @doc false
   def changeset(site, attrs) do
     site
-    |> cast(attrs, [:name, :domain, :public_id])
-    |> validate_required([:name, :domain])
+    |> cast(attrs, [:name, :domain, :public_id, :user_id])
+    |> validate_required([:name, :domain, :user_id])
     |> unique_constraint(:public_id)
     |> unique_constraint(:domain)
     |> generate_public_id()

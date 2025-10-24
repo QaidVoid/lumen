@@ -21,9 +21,6 @@ defmodule LumenWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-
-    live "/sites", SitesLive
-    live "/dashboard/:site_id", DashboardLive
   end
 
   # Other scopes may use custom stacks.
@@ -59,6 +56,11 @@ defmodule LumenWeb.Router do
       on_mount: [{LumenWeb.UserAuth, :require_authenticated}] do
       live "/users/settings", UserLive.Settings, :edit
       live "/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email
+
+      live "/sites", SitesLive
+      live "/sites/new", SiteFormLive, :new
+      live "/sites/:id/edit", SiteFormLive, :edit
+      live "/dashboard/:site_id", DashboardLive
     end
 
     post "/users/update-password", UserSessionController, :update_password
