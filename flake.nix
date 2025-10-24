@@ -3,19 +3,27 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs =
-    { nixpkgs, flake-utils, ... }:
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = import nixpkgs { inherit system; };
-        optional = pkgs.lib.optional;
-      in
-      {
-        devShells.default = pkgs.mkShell {
+    { nixpkgs, ... }:
+    let
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "aarch64-darwin"
+      ];
+
+      forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
+    in
+    {
+      devShell = forAllSystems (
+        system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+          optional = pkgs.lib.optional;
+        in
+        pkgs.mkShell {
           name = "lumen";
           buildInputs =
             with pkgs;
@@ -86,7 +94,7 @@
 
             export TAILWINDCSS_PATH="${pkgs.lib.getExe pkgs.tailwindcss_4}"
           '';
-        };
-      }
-    );
+        }
+      );
+    };
 }
