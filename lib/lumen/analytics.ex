@@ -160,9 +160,9 @@ defmodule Lumen.Analytics do
     ua = String.downcase(user_agent)
 
     cond do
-      String.contains?(ua, "mobile") or String.contains?(ua, "android") -> "📱 Mobile"
-      String.contains?(ua, "tablet") or String.contains?(ua, "ipad") -> "📱 Tablet"
-      true -> "💻 Desktop"
+      String.contains?(ua, "mobile") or String.contains?(ua, "android") -> "Mobile"
+      String.contains?(ua, "tablet") or String.contains?(ua, "ipad") -> "Tablet"
+      true -> "Desktop"
     end
   end
 

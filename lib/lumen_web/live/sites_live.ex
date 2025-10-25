@@ -16,7 +16,10 @@ defmodule LumenWeb.SitesLive do
       <div class="h-full bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div class="flex items-center justify-between mb-8">
-            <h1 class="text-4xl font-bold text-gray-900">🔥 Your Sites</h1>
+            <div class="flex items-center space-x-3">
+              <.icon name="hero-fire" class="size-8 text-orange-500" />
+              <h1 class="text-4xl font-bold text-gray-900">Your Sites</h1>
+            </div>
             <.link
               navigate={~p"/sites/new"}
               class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"

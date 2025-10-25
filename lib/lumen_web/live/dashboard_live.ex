@@ -114,7 +114,8 @@ defmodule LumenWeb.DashboardLive do
                   navigate={~p"/sites"}
                   class="text-sm text-blue-600 hover:text-blue-800 mb-2 inline-block"
                 >
-                  ← Back to Sites
+                  <.icon name="hero-arrow-left" class="size-4" />
+                  <span>Back to Sites</span>
                 </.link>
                 <h1 class="text-3xl font-bold text-gray-900">{@site.name}</h1>
                 <p class="text-sm text-gray-500 mt-1">{@site.domain}</p>
@@ -170,25 +171,31 @@ defmodule LumenWeb.DashboardLive do
             <.stat_card
               title="Total Views"
               value={@stats.total_views}
-              icon="📊"
+              icon="chart-bar"
               subtitle={"Last #{@date_range} days"}
+              icon_class="text-red-500"
             />
             <.stat_card
               title="Unique Visitors Today"
               value={@stats.unique_visitors}
-              icon="👥"
+              icon="users"
               subtitle={"Last #{@date_range} days"}
+              icon_class="text-blue-500"
             />
             <.stat_card
               title="Avg. Views/Day"
               value={@stats.avg_views_per_day}
-              icon="📈"
+              icon="arrow-trending-up"
               subtitle={"Last #{@date_range} days"}
+              icon_class="text-green-500"
             />
           </div>
 
           <div class="bg-white rounded-lg shadow p-6 mb-8">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4">📈 Pageviews Over Time</h2>
+            <div class="flex items-center space-x-2 mb-4">
+              <.icon name="hero-chart-bar" class="size-5 text-gray-700" />
+              <h2 class="text-lg font-semibold text-gray-900">Pageviews Over Time</h2>
+            </div>
             <div style="position: relative; height: 300px;">
               <canvas
                 id="pageviews-chart"
@@ -202,7 +209,10 @@ defmodule LumenWeb.DashboardLive do
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 py-4">
             <div class="bg-white rounded-lg shadow p-6">
-              <h2 class="text-lg font-semibold text-gray-900 mb-4">📄 Top Pages</h2>
+              <div class="flex items-center space-x-2 mb-4">
+                <.icon name="hero-document-text" class="size-5 text-blue-700" />
+                <h2 class="text-lg font-semibold text-gray-900">Top Pages</h2>
+              </div>
               <div class="space-y-3">
                 <%= if Enum.empty?(@top_pages) do %>
                   <p class="text-gray-500 text-sm">No data yet. Visit some pages!</p>
@@ -218,7 +228,10 @@ defmodule LumenWeb.DashboardLive do
             </div>
 
             <div class="bg-white rounded-lg shadow p-6">
-              <h2 class="text-lg font-semibold text-gray-900 mb-4">🌍 Top Referrers</h2>
+              <div class="flex items-center space-x-2 mb-4">
+                <.icon name="hero-globe-alt" class="size-5 text-blue-700" />
+                <h2 class="text-lg font-semibold text-gray-900">Top Referrers</h2>
+              </div>
               <div class="space-y-3">
                 <%= if Enum.empty?(@top_referrers) do %>
                   <p class="text-gray-500 text-sm">No referrer data yet</p>
@@ -244,7 +257,10 @@ defmodule LumenWeb.DashboardLive do
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 py-4">
             <div class="bg-white rounded-lg shadow p-6">
-              <h2 class="text-lg font-semibold text-gray-900 mb-4">🌐 Browsers</h2>
+              <div class="flex items-center space-x-2 mb-4">
+                <.icon name="hero-globe-alt" class="size-5 text-emerald-700" />
+                <h2 class="text-lg font-semibold text-gray-900">Browsers</h2>
+              </div>
               <div class="space-y-3">
                 <%= if Enum.empty?(@browser_stats) do %>
                   <p class="text-gray-500 text-sm">No browser data yet</p>
@@ -260,7 +276,10 @@ defmodule LumenWeb.DashboardLive do
             </div>
 
             <div class="bg-white rounded-lg shadow p-6">
-              <h2 class="text-lg font-semibold text-gray-900 mb-4">📱 Devices</h2>
+              <div class="flex items-center space-x-2 mb-4">
+                <.icon name="hero-device-phone-mobile" class="size-5 text-orange-700" />
+                <h2 class="text-lg font-semibold text-gray-900">Devices</h2>
+              </div>
               <div class="space-y-3">
                 <%= if Enum.empty?(@device_stats) do %>
                   <p class="text-gray-500 text-sm">No device data yet</p>
@@ -277,7 +296,10 @@ defmodule LumenWeb.DashboardLive do
           </div>
 
           <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4">⚡ Recent Events</h2>
+            <div class="flex items-center space-x-2 mb-4">
+              <.icon name="hero-bolt" class="size-5 text-yellow-500" />
+              <h2 class="text-lg font-semibold text-gray-900">Recent Events</h2>
+            </div>
             <div class="space-y-2 max-h-96 overflow-y-auto">
               <%= if Enum.empty?(@recent_events) do %>
                 <p class="text-gray-500 text-sm">Waiting for events...</p>
@@ -311,7 +333,9 @@ defmodule LumenWeb.DashboardLive do
             <p class="text-xs text-gray-500 mt-1">{@subtitle}</p>
           <% end %>
         </div>
-        <div class="text-4xl">{@icon}</div>
+        <div class="text-4xl">
+          <.icon name={"hero-#{@icon}"} class={"#{@icon_class} size-10"} />
+        </div>
       </div>
     </div>
     """
