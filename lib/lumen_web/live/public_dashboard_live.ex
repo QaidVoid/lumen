@@ -49,14 +49,14 @@ defmodule LumenWeb.PublicDashboardLive do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash}>
-      <div class="min-h-screen bg-gray-50">
-        <.dashboard_header
-          site={@site}
-          date_range={@date_range}
-          is_public={true}
-        />
-
+      <div class="min-h-full bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <.dashboard_header
+            site={@site}
+            date_range={@date_range}
+            is_public={true}
+          />
+
           <.stats_cards stats={@stats} date_range={@date_range} />
 
           <.pageviews_chart chart_data={@chart_data} />

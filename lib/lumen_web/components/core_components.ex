@@ -56,23 +56,29 @@ defmodule LumenWeb.CoreComponents do
       id={@id}
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
-      class="toast toast-top toast-end z-50"
+      class="fixed top-5 right-5 z-50 flex items-start transition-all duration-300 ease-in-out"
       {@rest}
     >
       <div class={[
-        "alert w-80 sm:w-96 max-w-80 sm:max-w-96 text-wrap",
-        @kind == :info && "alert-info",
-        @kind == :error && "alert-error"
+        "flex items-start gap-3 p-4 rounded-lg shadow-md w-80 sm:w-96",
+        "border-l-4",
+        @kind == :info && "bg-base-100 border-l-primary text-primary",
+        @kind == :error && "bg-base-100 border-l-error text-error"
       ]}>
-        <.icon :if={@kind == :info} name="hero-information-circle" class="size-5 shrink-0" />
-        <.icon :if={@kind == :error} name="hero-exclamation-circle" class="size-5 shrink-0" />
-        <div>
-          <p :if={@title} class="font-semibold">{@title}</p>
-          <p>{msg}</p>
+        <.icon
+          name={if @kind == :info, do: "hero-information-circle", else: "hero-exclamation-circle"}
+          class="size-5 mt-0.5 flex-shrink-0"
+        />
+        <div class="flex-1">
+          <p :if={@title} class="font-semibold text-sm mb-1">{@title}</p>
+          <p class="text-sm text-base-content/90">{msg}</p>
         </div>
-        <div class="flex-1" />
-        <button type="button" class="group self-start cursor-pointer" aria-label={gettext("close")}>
-          <.icon name="hero-x-mark" class="size-5 opacity-40 group-hover:opacity-70" />
+        <button
+          type="button"
+          class="ml-2 p-1 rounded hover:bg-base-200 dark:hover:bg-base-300 transition"
+          aria-label={gettext("close")}
+        >
+          <.icon name="hero-x-mark" class="size-4 opacity-50 hover:opacity-80 transition" />
         </button>
       </div>
     </div>

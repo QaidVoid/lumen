@@ -29,50 +29,53 @@
         window.addEventListener("phx:set-theme", (e) => setTheme(e.target.dataset.phxTheme));
       })();
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js">
+    </script>
   </head>
   <body class="flex flex-col h-screen antialiased">
-    <nav class="bg-white shadow">
+    <nav class="bg-base-300 shadow">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 justify-between">
           <div class="flex">
             <div class="flex flex-shrink-0 items-center">
               <.link navigate={~p"/sites"} class="flex items-center space-x-2">
                 <.icon name="hero-fire" class="w-8 h-8 text-orange-500" />
-                <span class="text-xl font-bold text-gray-900">Lumen</span>
+                <span class="text-xl font-bold text-base-content">Lumen</span>
               </.link>
             </div>
-            <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <div class="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-8">
               <.link
                 navigate={~p"/sites"}
-                class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900"
+                class="rounded-lg px-3 py-2 text-sm font-medium text-center text-base-content/70 hover:bg-base-100 transition"
               >
                 Sites
               </.link>
             </div>
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-4">
+            <Layouts.theme_toggle />
+
             <%= if @current_scope do %>
-              <span class="text-sm text-gray-700">
+              <span class="text-sm text-base-content/70 font-medium">
                 {@current_scope.user.email}
               </span>
               <.link
                 navigate={~p"/users/settings"}
-                class="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 transition"
+                class="rounded-lg px-3 py-2 text-sm font-medium text-center text-base-content/70 hover:bg-base-100 transition"
               >
                 Settings
               </.link>
               <.link
                 href={~p"/users/log-out"}
                 method="delete"
-                class="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 transition"
+                class="rounded-lg px-3 py-2 text-sm font-medium text-center text-base-content/70 hover:bg-base-100 transition"
               >
                 Sign Out
               </.link>
             <% else %>
               <.link
                 navigate={~p"/users/log-in"}
-                class="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 transition"
+                class="rounded-lg px-3 py-2 text-sm font-medium text-center text-base-content/70 hover:bg-base-100 transition"
               >
                 Sign In
               </.link>

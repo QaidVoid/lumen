@@ -75,44 +75,52 @@ defmodule LumenWeb.SiteFormLive do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
-      <div class="min-h-screen bg-gray-50 py-12">
+      <div class="min-h-full bg-base-100 py-8 overflow-y-scroll scrollbar-gutter-stable">
         <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="bg-white rounded-lg shadow p-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-8">{@page_title}</h1>
+          <div class="bg-base-100 rounded-xl shadow-md p-6 border border-base-200">
+            <h1 class="text-2xl font-semibold text-base-content mb-6">
+              {@page_title}
+            </h1>
 
-            <.form for={@form} phx-change="validate" phx-submit="save" class="space-y-6">
+            <.form for={@form} phx-change="validate" phx-submit="save" class="space-y-4">
               <div>
-                <label for="site_name">Site Name</label>
+                <label for="site_name" class="label pb-1">
+                  <span class="label-text">Site Name</span>
+                </label>
                 <.input
                   field={@form[:name]}
                   type="text"
                   placeholder="My Awesome Blog"
                   required
+                  class="input input-bordered w-full"
                 />
               </div>
 
               <div>
-                <label for="site_domain">Domain</label>
+                <label for="site_domain" class="label pb-1">
+                  <span class="label-text">Domain</span>
+                </label>
                 <.input
                   field={@form[:domain]}
                   type="text"
                   placeholder="example.com"
                   required
+                  class="input input-bordered w-full"
                 />
-                <p class="mt-1 text-sm text-gray-500">
+                <p class="mt-1 text-xs text-base-content/70">
                   Without http:// or https://
                 </p>
               </div>
 
-              <div class="flex items-center justify-between pt-4">
-                <.link navigate={~p"/sites"} class="text-gray-600 hover:text-gray-800">
+              <div class="flex items-center justify-between pt-3">
+                <.link
+                  navigate={~p"/sites"}
+                  class="btn btn-ghost btn-sm"
+                >
                   Cancel
                 </.link>
 
-                <button
-                  type="submit"
-                  class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
-                >
+                <button type="submit" class="btn btn-primary btn-sm">
                   Save Site
                 </button>
               </div>

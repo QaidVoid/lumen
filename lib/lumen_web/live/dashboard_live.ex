@@ -62,15 +62,15 @@ defmodule LumenWeb.DashboardLive do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
-      <div class="min-h-screen bg-gray-50" phx-hook="Download" id="dashboard-container">
-        <.dashboard_header
-          site={@site}
-          date_range={@date_range}
-          show_back_link={true}
-          show_export={true}
-        />
-
+      <div class="min-h-full bg-base-100" phx-hook="Download" id="dashboard-container">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <.dashboard_header
+            site={@site}
+            date_range={@date_range}
+            show_back_link={true}
+            show_export={true}
+          />
+
           <.stats_cards stats={@stats} date_range={@date_range} />
 
           <.pageviews_chart chart_data={@chart_data} />
