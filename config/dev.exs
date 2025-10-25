@@ -64,6 +64,19 @@ config :lumen, LumenWeb.Endpoint,
     ]
   ]
 
+# Oban dev mode
+config :lumen, Oban,
+  repo: Lumen.Repo,
+  plugins: [
+    # Keep jobs for 1 day (easier to test in dev although it's supposed to be a week)
+    {Oban.Plugins.Pruner, max_age: 60 * 60 * 24},
+    {Oban.Plugins.Cron,
+     crontab: [
+       # At 8:00 AM every day
+       {"0 8 * * *", Lumen.Workers.WeeklyReportWorker}
+     ]}
+  ]
+
 # Enable dev routes for dashboard and mailbox
 config :lumen, dev_routes: true
 

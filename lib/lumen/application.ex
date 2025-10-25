@@ -12,6 +12,7 @@ defmodule Lumen.Application do
       Lumen.Repo,
       {DNSCluster, query: Application.get_env(:lumen, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Lumen.PubSub},
+      {Oban, Application.fetch_env!(:lumen, Oban)},
       # Start a worker by calling: Lumen.Worker.start_link(arg)
       # {Lumen.Worker, arg},
       # Start to serve requests, typically the last entry

@@ -98,4 +98,13 @@ defmodule Lumen.Sites do
     |> change_site(%{share_token: new_token})
     |> Repo.update()
   end
+
+  @doc """
+  Toggles email reports for a site.
+  """
+  def toggle_email_reports(%Site{} = site) do
+    site
+    |> change_site(%{email_reports_enabled: !site.email_reports_enabled})
+    |> Repo.update()
+  end
 end

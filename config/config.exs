@@ -35,6 +35,21 @@ config :lumen, LumenWeb.Endpoint,
   pubsub_server: Lumen.PubSub,
   live_view: [signing_salt: "yM5+cxNB"]
 
+# Configure Oban
+config :lumen, Oban,
+  repo: Lumen.Repo,
+  engine: Oban.Engines.Basic,
+  queues: [default: 10, reports: 5],
+  plugins: [
+    # Keep jobs for 1 week
+    {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 7},
+    {Oban.Plugins.Cron,
+     crontab: [
+       # Mondays at 8:00 AM
+       {"0 8 * * 1", Lumen.Workers.WeeklyReportWorker}
+     ]}
+  ]
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails

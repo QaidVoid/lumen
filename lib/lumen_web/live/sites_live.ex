@@ -100,6 +100,29 @@ defmodule LumenWeb.SitesLive do
                     <% end %>
                   </div>
 
+                  <div class="mt-4 pt-4 border-t border-gray-100">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center space-x-2">
+                        <.icon name="hero-envelope" class="w-4 h-4 text-gray-400" />
+                        <p class="text-xs text-gray-600">Weekly Email Reports</p>
+                      </div>
+                      <button
+                        phx-click="toggle_email_reports"
+                        phx-value-id={site.id}
+                        class={"relative inline-flex h-6 w-11 items-center rounded-full transition #{if site.email_reports_enabled, do: "bg-blue-600", else: "bg-gray-200"}"}
+                      >
+                        <span class={"inline-block h-4 w-4 transform rounded-full bg-white transition #{if site.email_reports_enabled, do: "translate-x-6", else: "translate-x-1"}"}>
+                        </span>
+                      </button>
+                    </div>
+                    <%= if site.email_reports_enabled do %>
+                      <p class="text-xs text-green-600 mt-1 flex items-center space-x-1">
+                        <.icon name="hero-check-circle" class="w-3 h-3" />
+                        <span>Reports sent every Monday at 9 AM</span>
+                      </p>
+                    <% end %>
+                  </div>
+
                   <div class="mt-4 flex space-x-2">
                     <.link
                       navigate={~p"/sites/#{site.id}/edit"}
@@ -176,5 +199,16 @@ defmodule LumenWeb.SitesLive do
   @impl true
   def handle_event("copy_share_link", %{"url" => url}, socket) do
     {:noreply, push_event(socket, "copy-to-clipboard", %{text: url})}
+  end
+
+  @impl true
+  def handle_event("toggle_email_reports", %{"id" => site_id}, socket) do
+    user = socket.assigns.current_scope.user
+    site = Sites.get_user_site!(user.id, site_id)
+
+    {:ok, _updated_site} = Sites.toggle_email_reports(site)
+
+    sites = Sites.list_user_sites(user.id)
+    {:noreply, assign(socket, sites: sites)}
   end
 end

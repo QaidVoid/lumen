@@ -10,6 +10,7 @@ defmodule Lumen.Sites.Site do
     field :public_id, :string
     field :share_token, :string
     field :public_dashboard_enabled, :boolean, default: false
+    field :email_reports_enabled, :boolean, default: false
 
     belongs_to :user, Lumen.Accounts.User, type: :integer
     has_many :events, Lumen.Analytics.Event
@@ -20,7 +21,7 @@ defmodule Lumen.Sites.Site do
   @doc false
   def changeset(site, attrs) do
     site
-    |> cast(attrs, [:name, :domain, :public_id, :user_id, :public_dashboard_enabled])
+    |> cast(attrs, [:name, :domain, :public_id, :user_id, :public_dashboard_enabled, :email_reports_enabled])
     |> validate_required([:name, :domain, :user_id])
     |> unique_constraint(:public_id)
     |> unique_constraint(:domain)
