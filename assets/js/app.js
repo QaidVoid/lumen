@@ -27,6 +27,7 @@ import topbar from "../vendor/topbar";
 
 import ChartHook from "./hooks/chart";
 import DownloadHook from "./hooks/download";
+import ClipboardHook from "./hooks/clipboard";
 
 const csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -38,6 +39,7 @@ const liveSocket = new LiveSocket("/live", Socket, {
     ...colocatedHooks,
     Chart: ChartHook,
     Download: DownloadHook,
+    Clipboard: ClipboardHook,
   },
 });
 

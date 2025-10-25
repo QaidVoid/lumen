@@ -36,6 +36,7 @@ defmodule Lumen.Sites do
   """
   def create_site(user_id, attrs \\ %{}) do
     attrs = Map.put(attrs, "user_id", user_id)
+
     result =
       %Site{}
       |> Site.changeset(attrs)
@@ -65,5 +66,36 @@ defmodule Lumen.Sites do
   """
   def change_site(%Site{} = site, attrs \\ %{}) do
     Site.changeset(site, attrs)
+  end
+
+  @doc """
+  Gets a site by share token (for public dashboard).
+  """
+  def get_site_by_share_token(share_token) do
+    Site
+    |> where([s], s.share_token == ^share_token and s.public_dashboard_enabled == true)
+    |> Repo.one()
+  end
+
+  @doc """
+  Toggles public dashboard access for a site.
+  """
+  def toggle_public_dashboard(%Site{} = site) do
+    site
+    |> change_site(%{public_dashboard_enabled: !site.public_dashboard_enabled})
+    |> Repo.update()
+  end
+
+  @doc """
+  Regenerates the share token for a site.
+  """
+  def regenerate_share_token(%Site{} = site) do
+    new_token =
+      :crypto.strong_rand_bytes(16)
+      |> Base.url_encode64(padding: false)
+
+    site
+    |> change_site(%{share_token: new_token})
+    |> Repo.update()
   end
 end

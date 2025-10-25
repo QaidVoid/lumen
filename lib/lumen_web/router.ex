@@ -21,6 +21,7 @@ defmodule LumenWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live "/public/:share_token", PublicDashboardLive
   end
 
   # Other scopes may use custom stacks.

@@ -48,6 +48,58 @@ defmodule LumenWeb.SitesLive do
                     </code>
                   </div>
 
+                  <div class="mt-4 pt-4 border-t border-gray-100">
+                    <div class="flex items-center justify-between mb-2">
+                      <p class="text-xs text-gray-400 flex items-center space-x-1">
+                        <.icon name="hero-eye" class="size-3" />
+                        <span>Public Dashboard</span>
+                      </p>
+                      <button
+                        phx-click="toggle_public"
+                        phx-value-id={site.id}
+                        class={"relative inline-flex h-6 w-11 items-center rounded-full transition #{if site.public_dashboard_enabled, do: "bg-blue-600", else: "bg-gray-200"}"}
+                      >
+                        <span class={"inline-block size-4 transform rounded-full bg-white transition #{if site.public_dashboard_enabled, do: "translate-x-6", else: "translate-x-1"}"}>
+                        </span>
+                      </button>
+                    </div>
+
+                    <%= if site.public_dashboard_enabled do %>
+                      <div class="space-y-2">
+                        <div class="flex items-center space-x-2">
+                          <input
+                            type="text"
+                            readonly
+                            value={url(~p"/public/#{site.share_token}")}
+                            class="flex-1 text-xs font-mono bg-gray-50 border border-gray-200 rounded px-2 py-1 text-gray-700"
+                            id={"share-link-#{site.id}"}
+                          />
+                          <button
+                            id={"copy-share-link-#{site.id}"}
+                            phx-hook="Clipboard"
+                            phx-click="copy_share_link"
+                            phx-value-url={url(~p"/public/#{site.share_token}")}
+                            class="text-blue-600 hover:text-blue-800"
+                            title="Copy link"
+                          >
+                            <.icon name="hero-clipboard" class="size-4" />
+                          </button>
+                        </div>
+                        <button
+                          phx-click="regenerate_token"
+                          phx-value-id={site.id}
+                          data-confirm="This will invalidate the old link. Continue?"
+                          class="text-xs text-gray-600 hover:text-gray-800 flex items-center space-x-1"
+                        >
+                          <.icon name="hero-arrow-path" class="size-3" />
+                          <span>Regenerate Link</span>
+                        </button>
+                      </div>
+                    <% else %>
+                      <p class="text-xs text-gray-500 mt-1">Enable to share publicly</p>
+                    <% end %>
+                  </div>
+
                   <div class="mt-4 flex space-x-2">
                     <.link
                       navigate={~p"/sites/#{site.id}/edit"}
@@ -93,5 +145,36 @@ defmodule LumenWeb.SitesLive do
          socket
          |> put_flash(:error, "Failed to delete site.")}
     end
+  end
+
+  @impl true
+  def handle_event("toggle_public", %{"id" => site_id}, socket) do
+    user = socket.assigns.current_scope.user
+    site = Sites.get_user_site!(user.id, site_id)
+
+    {:ok, _updated_site} = Sites.toggle_public_dashboard(site)
+
+    sites = Sites.list_user_sites(user.id)
+    {:noreply, assign(socket, sites: sites)}
+  end
+
+  @impl true
+  def handle_event("regenerate_token", %{"id" => site_id}, socket) do
+    user = socket.assigns.current_scope.user
+    site = Sites.get_user_site!(user.id, site_id)
+
+    {:ok, _updated_site} = Sites.regenerate_share_token(site)
+
+    sites = Sites.list_user_sites(user.id)
+
+    {:noreply,
+     socket
+     |> assign(sites: sites)
+     |> put_flash(:info, "Share link regenerated")}
+  end
+
+  @impl true
+  def handle_event("copy_share_link", %{"url" => url}, socket) do
+    {:noreply, push_event(socket, "copy-to-clipboard", %{text: url})}
   end
 end

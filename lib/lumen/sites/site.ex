@@ -8,6 +8,8 @@ defmodule Lumen.Sites.Site do
     field :name, :string
     field :domain, :string
     field :public_id, :string
+    field :share_token, :string
+    field :public_dashboard_enabled, :boolean, default: false
 
     belongs_to :user, Lumen.Accounts.User, type: :integer
     has_many :events, Lumen.Analytics.Event
@@ -18,11 +20,13 @@ defmodule Lumen.Sites.Site do
   @doc false
   def changeset(site, attrs) do
     site
-    |> cast(attrs, [:name, :domain, :public_id, :user_id])
+    |> cast(attrs, [:name, :domain, :public_id, :user_id, :public_dashboard_enabled])
     |> validate_required([:name, :domain, :user_id])
     |> unique_constraint(:public_id)
     |> unique_constraint(:domain)
+    |> unique_constraint(:share_token)
     |> generate_public_id()
+    |> generate_share_token()
     |> validate_required([:public_id])
   end
 
@@ -34,7 +38,22 @@ defmodule Lumen.Sites.Site do
     end
   end
 
+  defp generate_share_token(changeset) do
+    if get_field(changeset, :share_token) do
+      changeset
+    else
+      put_change(changeset, :share_token, generate_random_token())
+    end
+  end
+
   defp generate_random_id do
-    :crypto.strong_rand_bytes(8) |> Base.url_encode64(padding: false) |> binary_part(0, 8)
+    :crypto.strong_rand_bytes(8)
+    |> Base.url_encode64(padding: false)
+    |> binary_part(0, 8)
+  end
+
+  defp generate_random_token do
+    :crypto.strong_rand_bytes(16)
+    |> Base.url_encode64(padding: false)
   end
 end
