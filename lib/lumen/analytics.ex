@@ -204,4 +204,49 @@ defmodule Lumen.Analytics do
       date_range: {start_date, end_date}
     }
   end
+
+  @doc """
+  Exports analytics data to CSV format.
+  """
+  def export_to_csv(site_id, date_range \\ 30) do
+    start_date = Date.utc_today() |> Date.add(-date_range)
+
+    events =
+      Event
+      |> where([e], e.site_id == ^site_id)
+      |> where([e], fragment("DATE(?)", e.inserted_at) >= ^start_date)
+      |> order_by([e], desc: e.inserted_at)
+      |> Repo.all()
+
+    csv_header = "Timestamp,Path,Referrer,IP,User Agent\n"
+
+    csv_rows =
+      Enum.map(events, fn event ->
+        timestamp =
+          DateTime.from_naive!(event.inserted_at, "Etc/UTC")
+          |> DateTime.to_iso8601()
+
+        [
+          timestamp,
+          escape_csv(event.path),
+          escape_csv(event.referrer),
+          escape_csv(event.ip),
+          escape_csv(event.user_agent)
+        ]
+        |> Enum.join(",")
+      end)
+      |> Enum.join("\n")
+
+    csv_header <> csv_rows
+  end
+
+  defp escape_csv(nil), do: ""
+
+  defp escape_csv(value) do
+    if String.contains?(value, [",", "\"", "\n"]) do
+      "\"#{String.replace(value, "\"", "\"\"")}\""
+    else
+      value
+    end
+  end
 end

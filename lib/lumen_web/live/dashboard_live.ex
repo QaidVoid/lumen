@@ -39,6 +39,23 @@ defmodule LumenWeb.DashboardLive do
     {:noreply, socket}
   end
 
+  @impl true
+  def handle_event("export_csv", _, socket) do
+    site = socket.assigns.site
+    date_range = socket.assigns.date_range
+
+    csv_data = Analytics.export_to_csv(site.id, date_range)
+    filename = "#{site.domain}-analytics-#{Date.utc_today()}.csv"
+
+    {:noreply,
+     socket
+     |> push_event("download", %{
+       data: csv_data,
+       filename: filename,
+       mime_type: "text/csv"
+     })}
+  end
+
   defp load_dashboard_data(socket) do
     site = socket.assigns.site
     date_range = socket.assigns.date_range
@@ -157,8 +174,18 @@ defmodule LumenWeb.DashboardLive do
                   </button>
                 </div>
 
+                <button
+                  id="export-csv"
+                  phx-click="export_csv"
+                  phx-hook="Download"
+                  class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition inline-flex items-center space-x-2"
+                >
+                  <.icon name="hero-arrow-down-tray" class="size-5" />
+                  <span>Export CSV</span>
+                </button>
+
                 <div class="flex items-center space-x-2">
-                  <div class="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <div class="size-2 bg-green-500 rounded-full animate-pulse"></div>
                   <span class="text-sm text-gray-600">Live</span>
                 </div>
               </div>
