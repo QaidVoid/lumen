@@ -64,10 +64,6 @@
               (writeShellScriptBin "pg-stop" ''
                 pg_ctl stop -D $PGDATA
               '')
-
-              (writeShellScriptBin "install-phx" ''
-                mix archive.install hex phx_new
-              '')
             ]
             ++ optional pkgs.stdenv.isLinux pkgs.libnotify
             ++ optional pkgs.stdenv.isLinux pkgs.inotify-tools;
