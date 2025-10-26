@@ -103,11 +103,27 @@
 [data-phx-session], [data-phx-teleported-src] { display: contents }
 
 /* This file is for your main application CSS */
-html[data-theme="light"] #hero-image {
-  content: url('/images/hero-light.webp');
+
+#hero {
+  background-image: url('/images/placeholder.webp');
+  background-size: cover;
+  background-position: center;
 }
 
-html[data-theme="dark"] #hero-image {
-  content: url('/images/hero-dark.webp');
+html[data-theme="dark"] #hero {
+  background-image: url('/images/hero-dark.webp');
 }
 
+html[data-theme="light"] #hero {
+  background-image: url('/images/hero-light.webp');
+}
+
+html:not([data-theme]) #hero {
+  background-image: url('/images/hero-light.webp');
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) #hero {
+    background-image: url('/images/hero-dark.webp');
+  }
+}
