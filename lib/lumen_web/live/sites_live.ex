@@ -84,6 +84,7 @@ defmodule LumenWeb.SitesLive do
                               phx-hook="Clipboard"
                               phx-click="copy_share_link"
                               phx-value-url={url(~p"/public/#{site.share_token}")}
+                              phx-value-id={site.id}
                               class="btn btn-square btn-ghost btn-xs text-primary"
                               title="Copy link"
                             >
@@ -197,8 +198,8 @@ defmodule LumenWeb.SitesLive do
   end
 
   @impl true
-  def handle_event("copy_share_link", %{"url" => url}, socket) do
-    {:noreply, push_event(socket, "copy-to-clipboard", %{text: url})}
+  def handle_event("copy_share_link", %{"url" => url, "id" => site_id}, socket) do
+    {:noreply, push_event(socket, "copy-to-clipboard", %{text: url, button_id: "copy-share-link-#{site_id}"})}
   end
 
   @impl true
