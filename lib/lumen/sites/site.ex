@@ -21,7 +21,7 @@ defmodule Lumen.Sites.Site do
   @doc false
   def changeset(site, attrs) do
     site
-    |> cast(attrs, [:name, :domain, :public_id, :user_id, :public_dashboard_enabled, :email_reports_enabled])
+    |> cast(attrs, [:name, :domain, :public_id, :user_id, :public_dashboard_enabled, :email_reports_enabled, :share_token])
     |> validate_required([:name, :domain, :user_id])
     |> unique_constraint(:public_id)
     |> unique_constraint(:domain)
